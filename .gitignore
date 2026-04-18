@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Raw data (reproducible via loaders; don't commit)
+# Ignore contents but keep the directory via .gitkeep
+data/raw/*
+!data/raw/.gitkeep
+
+# Baseline artifacts from refactor verification
+outputs/figures/_baseline/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
