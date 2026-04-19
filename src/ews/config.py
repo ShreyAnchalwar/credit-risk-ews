@@ -52,7 +52,7 @@ TICKERS = list(FIRMS.keys())
 # is acceptable for this panel.
 #
 # CHK (Chesapeake Energy): delisted post-bankruptcy (June 2020); yfinance
-# returns no data. Intentional skip — documented in 03_OUTPUTS.md as the
+# returns no data. Intentional skip — documented in 02_OUTPUTS.md as the
 # reason one trajectory subplot stays empty. The baseline Phase 1 panel was
 # built without CHK; the refactor preserves that behavior.
 ALLOWED_SHORT_HISTORY: set[str] = {"CHK"}

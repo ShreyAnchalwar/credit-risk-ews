@@ -214,7 +214,7 @@ def load_fundamentals(
     elif source == "sec":
         raise NotImplementedError(
             "load_fundamentals(source='sec') — Allen's SEC EDGAR loader is not yet "
-            "wired. See docs/06_PLUGGING_IN_REAL_DATA.md for the contract your "
+            "wired. See docs/05_PLUGGING_IN_REAL_DATA.md for the contract your "
             "implementation must satisfy."
         )
     else:
@@ -302,7 +302,7 @@ def load_macros(dates: pd.DatetimeIndex, source: str = "synthetic") -> pd.DataFr
     elif source == "fred":
         raise NotImplementedError(
             "load_macros(source='fred') — FRED API loader is not yet wired. "
-            "See docs/06_PLUGGING_IN_REAL_DATA.md."
+            "See docs/05_PLUGGING_IN_REAL_DATA.md."
         )
     else:
         raise LoaderError(
@@ -389,7 +389,7 @@ def load_labels(
     elif source == "8k":
         raise NotImplementedError(
             "load_labels(source='8k') — Darren's 8-K bankruptcy loader is not yet "
-            "wired. See docs/06_PLUGGING_IN_REAL_DATA.md for Label B semantics."
+            "wired. See docs/05_PLUGGING_IN_REAL_DATA.md for Label B semantics."
         )
     else:
         raise LoaderError(

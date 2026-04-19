@@ -1,6 +1,6 @@
-# 02 — Pipeline
+# 01 — Pipeline
 
-How the four input families in `01_INPUTS.md` become the four output charts in `03_OUTPUTS.md`.
+How the four input families (see README "Data sources") become the four output charts in `02_OUTPUTS.md`.
 
 ## High-level flow
 
@@ -64,6 +64,23 @@ How the four input families in `01_INPUTS.md` become the four output charts in `
   └────────────────────────────────────────────────────────┘
 ```
 
+## Diagram ↔ code cross-reference
+
+Each stage in the ASCII flow above maps 1:1 to a module in `src/ews/`. If the diagram tells you the *what*, this table tells you the *where*:
+
+| Stage | Module | Key functions |
+| :---- | :----- | :------------ |
+| 1. Ingest | `src/ews/loaders.py` | `load_prices`, `load_fundamentals`, `load_macros` |
+| 2. Feature engineering | `src/ews/features.py` | `build_market_features` |
+| 3. Label construction | `src/ews/labels.py` | `compute_label_a_from_prices` (Label B lands here too when Darren ships) |
+| 4. Panel assembly | `src/ews/panel.py` | `assemble_panel` |
+| 5. Time split | `src/ews/panel.py` | `time_split` |
+| 6. Models | `src/ews/models.py` | `model_pooled_logit`, `model_fe_logit`, `model_hazard_logit` |
+| 7. Evaluation | `src/ews/eval.py` | `evaluate_model`, `compute_lead_time`, `ablation_analysis`, `robustness_rolling_window` |
+| 8. Charts | `src/ews/viz.py` | `plot_roc_pr`, `plot_calibration`, `plot_risk_deciles`, `plot_firm_risk_trajectory` |
+
+Everything is stitched together by `src/ews/run.py`; the `python src/ivan_ews_phase1.py` entry point is a 3-line shim that calls `ews.run.main()`.
+
 ## Stage-by-stage
 
 ### (1) Ingest
@@ -106,13 +123,15 @@ We split **by time, not by firm**. Every firm appears in every split window. Thi
 
 Three models, same feature set, different assumptions. All are logistic regressions (linear in log-odds, exponential in probability) — interpretable, no black-box.
 
-| Model | What it assumes | What it adds |
-| :--- | :--- | :--- |
-| Pooled logit | Every firm-month is an independent observation | Simplicity, baseline |
-| Fixed-effects logit | Each firm has its own baseline distress rate | Controls for unobserved firm heterogeneity |
-| Hazard logit (Shumway) | Risk of first-event, conditioned on surviving to t | Proper time-to-event framing |
+| Model | What it assumes | What it adds | Phase 1 scope |
+| :--- | :--- | :--- | :--- |
+| Pooled logit | Every firm-month is an independent observation | Simplicity, baseline | **Committed** (proposal Table 2) |
+| Fixed-effects logit | Each firm has its own baseline distress rate | Controls for unobserved firm heterogeneity | **Preview** — delivered ahead of schedule toward Phase 2 |
+| Hazard logit (Shumway) | Risk of first-event, conditioned on surviving to t | Proper time-to-event framing | **Preview** — delivered ahead of schedule toward Phase 2 |
 
 All three produce a probability score between 0 and 1 for each firm-month.
+
+**Framing note.** The proposal's Phase 1 milestone commits only the pooled logit to April 24. The fixed-effects and Shumway-style hazard models are implemented and fit in the same run as a preview — treat their metrics as provisional until the 60–80 firm panel lands in Phase 2. `run.py`'s tier-2 fallback policy means either preview model can fail to fit on the current 10-firm toy panel (e.g., the hazard logit hits a singular matrix on Phase 1 data) and the pipeline falls back to pooled predictions with a loud warning; this is the expected behavior, not a bug.
 
 ### (7) Evaluation
 
