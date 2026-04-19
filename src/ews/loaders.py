@@ -140,7 +140,7 @@ def _prices_yfinance_impl(tickers: list[str], start: str, end: str) -> pd.DataFr
             print(f"  ✓ {ticker}: {len(raw)} days (cached)")
         else:
             try:
-                data = yf.download(ticker, start=start, end=end, progress=False, auto_adjust=True)
+                data = yf.download(ticker, start=start, end=end, progress=False, auto_adjust=False)
             except Exception as e:
                 print(f"  ✗ {ticker}: download failed ({e})")
                 dropped.append((ticker, 0))
@@ -151,14 +151,16 @@ def _prices_yfinance_impl(tickers: list[str], start: str, end: str) -> pd.DataFr
                 dropped.append((ticker, 0))
                 continue
 
-            # yfinance with auto_adjust=True gives adjusted Close as "Close".
-            # We record both as the same value for schema simplicity; if a
-            # future source differentiates raw vs adjusted, split them here.
-            close = data["Close"].squeeze()
+            # auto_adjust=False so `close` and `adj_close` carry distinct values:
+            #   close     -> raw exchange close (unadjusted for splits/dividends)
+            #   adj_close -> split/dividend-adjusted close (the one features.py uses)
+            # Every downstream consumer (features.py, labels.py) already pivots on
+            # adj_close, so the adjusted-close values are numerically identical to
+            # what auto_adjust=True used to surface — panel output is unchanged.
             raw = pd.DataFrame({
                 "date": data.index,
-                "close": close.values,
-                "adj_close": close.values,
+                "close": data["Close"].squeeze().values,
+                "adj_close": data["Adj Close"].squeeze().values,
             })
             raw.to_csv(cache_path, index=False)
             print(f"  ✓ {ticker}: {len(raw)} days "

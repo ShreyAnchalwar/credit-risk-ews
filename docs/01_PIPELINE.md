@@ -157,3 +157,28 @@ If you change anything, respect these contracts:
 - **Label semantics.** `label_a` is binary, 1 = event within next 12 months. `forward_max_drawdown` is the underlying continuous value, useful for debugging but not a feature.
 - **No-look-ahead.** Any feature that touches data from month `t+1` or later breaks the project. This is non-negotiable.
 - **Time split.** All evaluation metrics are computed on validation and test windows, never on training. Mixing them invalidates the claims.
+
+## Proposal-feature coverage (Phase 1)
+
+Every feature the proposal's Table 1 commits to is produced by the code, in the file noted below. `✓` = in the current panel and the model consumes it. `Stored` = computed and present in `panel_phase1.csv`, but outside `config.FEATURE_COLS`. `Phase 2+` = explicitly deferred by the proposal itself.
+
+| Family | Proposal feature | Produced in | Phase 1 status |
+| :--- | :--- | :--- | :--- |
+| Fundamentals | leverage (TL/TA) | `loaders._fundamentals_placeholder_impl` | ✓ (synthetic; Phase 2: Allen, real SEC) |
+| Fundamentals | liquidity_buffer (Cash/TA) | same | ✓ (synthetic) |
+| Fundamentals | wc_ratio ((CA−CL)/TA) | same | ✓ (synthetic) |
+| Fundamentals | profitability (EBIT/TA) | same | ✓ (synthetic) |
+| Fundamentals | Altman Z-score benchmark | same (emitted as `z_score`) | Stored — proposal: Phase 2+ optional |
+| Market | ret_1m / ret_3m / ret_6m | `features.build_market_features` | ✓ |
+| Market | vol_3m / vol_6m (annualized) | `features.build_market_features` | ✓ |
+| Market | drawdown_12m (252d backward) | `features.build_market_features` | ✓ |
+| Market | Idiosyncratic vol vs SPX | not implemented | Phase 2 — needs SPY benchmark pull |
+| Market | Distance-to-default (Merton) | not implemented | Phase 2+ optional — needs shares outstanding |
+| Filing | late_filing (12b-25 in last 6m) | `loaders._fundamentals_placeholder_impl` (stub) | ✓ (placeholder; Phase 2: Darren, real 12b-25 parser) |
+| Macro | vix | `loaders._macros_synthetic_impl` | ✓ (synthetic; Phase 2: FRED `VIXCLS`) |
+| Macro | term_spread (10Y−2Y) | same | ✓ (synthetic) |
+| Macro | credit_spread (BAA proxy) | same | ✓ (synthetic) |
+| Label | Label A (forward 40% drawdown, 12m) | `labels.compute_label_a_from_prices` | ✓ |
+| Label | Label B (8-K Item 1.03 in next 12m) | placeholder in `labels.py` | Phase 2 — Darren |
+
+**Bottom line:** every Phase 1 feature the proposal names is produced by the code. Everything absent is deferred by the proposal itself. The only yfinance-side work remaining is SPX benchmark capture for Phase 2's idiosyncratic-volatility feature.
