@@ -6,11 +6,11 @@
 git clone <repo-url> && cd hku-final
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python src/ivan_ews_phase1.py    # run the pipeline (via shim; works from repo root)
+python src/run.py                # run the pipeline (works from repo root)
 python tests/smoke_test.py       # verify your setup (11 assertions)
 
-# The `python -m ews.run` form also works but needs PYTHONPATH:
-#   PYTHONPATH=src python -m ews.run
+# The `python -m ews.pipeline` form also works but needs PYTHONPATH:
+#   PYTHONPATH=src python -m ews.pipeline
 ```
 
 If the smoke test exits clean, you're ready to contribute.

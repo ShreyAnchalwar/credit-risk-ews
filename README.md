@@ -50,8 +50,7 @@ The proposal's Phase 1 target is 30–50 firms on a shorter horizon; the current
 │   │   ├── eval.py               ← metrics + ablation + robustness
 │   │   ├── viz.py                ← the four charts
 │   │   └── run.py                ← the orchestrator
-│   ├── ivan_ews_phase1.py        ← 3-line backwards-compat shim
-│   └── ivan_ews_models.py        ← earlier scratch (not part of the package)
+│   └── run.py                    ← pipeline entry point (thin wrapper; sets sys.path then calls ews.pipeline.main)
 ├── tests/
 │   └── smoke_test.py             ← 11 assertions on the refactor's new paths
 ├── data/
@@ -76,9 +75,9 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Run the pipeline (first run hits yfinance ~30–60s; subsequent runs use data/raw/ cache)
-python src/ivan_ews_phase1.py
+python src/run.py
 # or equivalently (PYTHONPATH=src is needed because there's no pyproject.toml yet):
-PYTHONPATH=src python -m ews.run
+PYTHONPATH=src python -m ews.pipeline
 
 # Verify your setup
 python tests/smoke_test.py

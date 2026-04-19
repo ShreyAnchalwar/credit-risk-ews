@@ -107,13 +107,13 @@ cd <repo root>
 source .venv/bin/activate
 
 # Run the pipeline with your loader as the data source.
-# Edit src/ews/run.py temporarily to change:
+# Edit src/ews/pipeline.py temporarily to change:
 #   fundamentals = load_fundamentals(TICKERS, monthly_dates, source="placeholder")
 # to:
 #   fundamentals = load_fundamentals(TICKERS, monthly_dates, source="sec")
 #
 # Then run:
-python src/ivan_ews_phase1.py
+python src/run.py
 
 # Or run the smoke test to check your loader passes the schema check:
 python tests/smoke_test.py

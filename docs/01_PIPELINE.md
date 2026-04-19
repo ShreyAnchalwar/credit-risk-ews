@@ -79,7 +79,7 @@ Each stage in the ASCII flow above maps 1:1 to a module in `src/ews/`. If the di
 | 7. Evaluation | `src/ews/eval.py` | `evaluate_model`, `compute_lead_time`, `ablation_analysis`, `robustness_rolling_window` |
 | 8. Charts | `src/ews/viz.py` | `plot_roc_pr`, `plot_calibration`, `plot_risk_deciles`, `plot_firm_risk_trajectory` |
 
-Everything is stitched together by `src/ews/run.py`; the `python src/ivan_ews_phase1.py` entry point is a 3-line shim that calls `ews.run.main()`.
+Everything is stitched together by `src/ews/pipeline.py`; `src/run.py` is a thin sys.path-setting wrapper so you can run `python src/run.py` from the repo root.
 
 ## Stage-by-stage
 
