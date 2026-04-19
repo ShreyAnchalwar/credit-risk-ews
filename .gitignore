@@ -5,10 +5,10 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Raw data (reproducible via loaders; don't commit)
-# Ignore contents but keep the directory via .gitkeep
-data/raw/*
-!data/raw/.gitkeep
+# Raw data (yfinance cache) IS committed so the panel is fully reproducible —
+# yfinance adjusts historical prices over time (splits, dividends), which would
+# otherwise cause the committed panel_phase1.csv to drift against a fresh run.
+# To force a refresh, delete data/raw/*.csv and re-run the pipeline.
 
 # Baseline artifacts from refactor verification
 outputs/figures/_baseline/

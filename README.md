@@ -55,7 +55,7 @@ The proposal's Phase 1 target is 30–50 firms on a shorter horizon; the current
 ├── tests/
 │   └── smoke_test.py             ← 11 assertions on the refactor's new paths
 ├── data/
-│   ├── raw/                      ← yfinance cache (gitignored)
+│   ├── raw/                      ← yfinance cache (committed for reproducibility)
 │   ├── interim/                  ← one CSV per loader (inspectable)
 │   └── processed/
 │       └── panel_phase1.csv      ← 1,490 firm-months × 23 columns

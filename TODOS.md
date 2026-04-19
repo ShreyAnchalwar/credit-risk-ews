@@ -73,7 +73,7 @@ Deferred work items. Each has context so future-you (or a teammate) can pick it 
 
 **Context for pickup:**
 - Mirror the `load_prices` cache implementation: check disk → read / fetch+write.
-- `data/raw/` directory is already scaffolded (gitignored) from the Phase 1 refactor.
+- `data/raw/` directory is already scaffolded from the Phase 1 refactor (Phase 1 yfinance cache is committed for reproducibility; SEC / FRED pulls follow the same pattern).
 - Manual invalidation: `rm data/raw/sec_*.json` or similar. No `--refresh` flag unless someone asks.
 
 **Depends on:** Allen's SEC loader shipping; FRED loader shipping.
