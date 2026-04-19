@@ -77,8 +77,8 @@ pip install -r requirements.txt
 
 # Run the pipeline (first run hits yfinance ~30–60s; subsequent runs use data/raw/ cache)
 python src/ivan_ews_phase1.py
-# or equivalently:
-python -m ews.run
+# or equivalently (PYTHONPATH=src is needed because there's no pyproject.toml yet):
+PYTHONPATH=src python -m ews.run
 
 # Verify your setup
 python tests/smoke_test.py
