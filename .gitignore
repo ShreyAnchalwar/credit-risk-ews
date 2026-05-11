@@ -20,3 +20,8 @@ outputs/figures/_baseline/
 .vscode/
 .idea/
 *.swp
+
+# Local reference files (not tracked)
+spec.md
+proposal.md
+DASHBOARD_README.md
