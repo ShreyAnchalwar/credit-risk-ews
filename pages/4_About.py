@@ -191,7 +191,7 @@ credit-risk-ews/
 ├── app.py                             # Legacy single-page version
 └── .gitignore
 ```
-""")
+"""
 st.markdown(repo_structure)
 
 st.markdown("---")
@@ -282,7 +282,7 @@ next_steps = """
 - Integration with Bloomberg/Refinitiv data
 - Causal inference analysis (what drives risk changes?)
 - Interpretability: SHAP values for individual predictions
-""")
+"""
 st.markdown(next_steps)
 
 st.markdown("---")
